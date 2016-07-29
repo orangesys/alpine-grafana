@@ -1,0 +1,31 @@
+machine:
+  pre:
+    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
+    - sudo chmod 0755 /usr/bin/docker
+    - sudo curl -L -o /usr/bin/jq 'https://github.com/stedolan/jq/releases/download/jq-1.5rc1/jq-linux-x86_64-static'
+    - sudo chmod +x /usr/bin/jq
+  python:
+    version: 2.7.3
+  timezone:
+    Asia/Tokyo
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+
+  pre:
+    - docker info
+    - ./build.sh
+
+test:
+  override:
+    - ./chechgrafana.sh
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push orangesys/alpine-grafana
