@@ -7,7 +7,6 @@ if [ $# -gt 0 ]; then
   dir=("$@")
 fi
 
-docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 log_msg() {
   echo "[$(date "+%Y/%m/%d %H:%M:%S %z")] $@"
 }
@@ -24,5 +23,4 @@ for path in $dockerfiles; do
   docker push "orangesys/alpine-grafana:${tag}"
   docker tag "orangesys/alpine-grafana:${tag}" "asia.gcr.io/orange-sys/alpine-grafana:${tag}"
   sudo /opt/google-cloud-sdk/bin/gcloud docker push asia.gcr.io/orange-sys/alpine-grafana:${tag}
-
 done
