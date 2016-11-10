@@ -20,10 +20,14 @@ dependencies:
     - docker info
   post:
     - ./build.sh
+    - docker images
 
 test:
   override:
+    - _id=$(docker run -d -p 3000:3000 orangesys/alpine-grafana)
     - ./chechgrafana.sh 
+    - docker stop ${_id}
+    - docker rm ${_id}
 
 general:
   branches:
