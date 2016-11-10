@@ -10,4 +10,4 @@ curl -s 'http://admin:admin@127.0.0.1:3000/api/datasources' \
 	"isDefault":true,
 	"database":"telegraf",
 	"user":"root",
-	"password":"root"}'|jq
+	"password":"root"}'|grep -q "Datasource added"

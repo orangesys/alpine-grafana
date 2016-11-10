@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/dumb-init /bin/bash 
+set -e
 
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p /grafana/.aws/
@@ -32,5 +33,5 @@ if [ ! -z ${GF_INSTALL_PLUGINS} ]; then
   IFS=$OLDIFS
 fi
 
-exec dumb-init gosu grafana grafana-server  \
+exec gosu grafana grafana-server  \
   --homepath=/grafana

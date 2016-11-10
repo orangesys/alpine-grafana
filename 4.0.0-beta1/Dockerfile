@@ -1,25 +1,23 @@
 FROM alpine:3.4
 MAINTAINER "Gavin zhou" <gavin.zhou@gmail.com>
 
-ENV GRAFANA_VERSION=v3.1.1
+ENV GRAFANA_VERSION=v4.0.0-beta1
 
 RUN set -ex && \
     addgroup -S grafana && \ 
     adduser -S -G grafana grafana && \
     export GOPATH=/go && \
     PATH=$PATH:$GOPATH/bin && \
-    buildDeps="build-base nodejs go git python curl make gcc musl-dev" && \
+    apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community go dumb-init && \
+    buildDeps="build-base nodejs git python curl make gcc musl-dev" && \
     apk add --no-cache $buildDeps ca-certificates openssl fontconfig bash && \
     curl -sL https://github.com/tianon/gosu/releases/download/1.9/gosu-amd64 > /usr/sbin/gosu && \
     chmod +x /usr/sbin/gosu && \
-    curl -sSL https://github.com/Yelp/dumb-init/archive/master.tar.gz | tar -xz && \
-    cd dumb-init-master && gcc -std=gnu99 -s -Wall -Werror -O3 -o /sbin/dumb-init /dumb-init-master/dumb-init.c && \
     mkdir -p ${GOPATH}/src/github.com/grafana && \
     cd ${GOPATH}/src/github.com/grafana && \
-    git clone --branch ${GRAFANA_VERSION} https://github.com/grafana/grafana.git &&\
+    git clone -b ${GRAFANA_VERSION} --depth 1 https://github.com/grafana/grafana.git &&\
     cd grafana && \
     go run build.go setup && \
-    godep restore && \
     go run build.go build && \
     npm install && \
     npm run build && \
@@ -37,7 +35,7 @@ RUN set -ex && \
     ln -s /grafana/plugins /var/lib/grafana/plugins && \ 
     grafana-cli plugins update-all && \
     go clean -i -r && \
-    apk del --purge $buildDeps && \
+    apk del --purge $buildDeps go && \
     rm -rf /go /tmp/* /root/.n* /dumb-init-master* && \
     chown -R grafana:grafana /grafana
 
