@@ -24,10 +24,10 @@ dependencies:
 
 test:
   override:
-    - _ID=$(docker run -d -p 3000:3000 orangesys/alpine-grafana)
+    - docker run -d -p 3000:3000 orangesys/alpine-grafana
     - ./chechgrafana.sh 
-    - docker stop $_ID
-    - docker rm $_ID
+    - docker stop $(docker ps -a -q)
+    - docker rm $(docker ps -a -q)
 
 general:
   branches:
