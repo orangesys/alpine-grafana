@@ -27,7 +27,7 @@ test:
     - docker run -d -p 3000:3000 orangesys/alpine-grafana
     - ./chechgrafana.sh 
     - docker stop $(docker ps -a -q)
-    - docker rm $(docker ps -a -q)
+    - docker rm $(docker ps -a -q) || /bin/true
 
 general:
   branches:
