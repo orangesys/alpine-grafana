@@ -6,7 +6,7 @@ ENV GRAFANA_VERSION=4.1.0-1482230757beta1
 RUN set -ex \
     && addgroup -S grafana \
     && adduser -S -G grafana grafana \
-    && apk add --no-cache ca-certificates openssl fontconfig curl bash \
+    && apk add --no-cache ca-certificates openssl fontconfig bash curl \
     && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community dumb-init \
     && curl -sL https://github.com/tianon/gosu/releases/download/1.9/gosu-amd64 > /usr/sbin/gosu \
     && chmod +x /usr/sbin/gosu  \
@@ -18,6 +18,9 @@ RUN set -ex \
     && mv grafana-$GRAFANA_VERSION/ grafana/ \
     && mv grafana/bin/* /usr/local/bin/ \
     && mkdir -p /grafana/{dashboards,data,logs,plugins} \
+    && mkdir /var/lib/grafana/ \
+    && ln -s /grafana/plugins /var/lib/grafana/plugins \
+    && grafana-cli plugins update-all \
     && rm -f grafana/conf/*.ini \
     && rm grafana-$GRAFANA_VERSION.linux-x64.tar.gz /etc/apk/keys/sgerrand.rsa.pub glibc-2.23-r3.apk \
     && chown -R grafana:grafana /grafana \
@@ -30,4 +33,3 @@ COPY ./run.sh /run.sh
 EXPOSE 3000
 
 ENTRYPOINT ["/run.sh"]
-
