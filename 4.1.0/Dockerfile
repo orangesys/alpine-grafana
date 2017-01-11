@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER "Gavin zhou" <gavin.zhou@gmail.com>
 
-ENV GRAFANA_VERSION=4.1.0-1482230757beta1
+ENV GRAFANA_VERSION=4.1.0
 
 RUN set -ex \
     && addgroup -S grafana \
