@@ -24,4 +24,5 @@ for path in $dockerfiles; do
   docker tag "orangesys/alpine-grafana:${tag}" "quay.io/orangesys/alpine-grafana:${tag}"
   docker push quay.io/orangesys/alpine-grafana:${tag}
   sudo /opt/google-cloud-sdk/bin/gcloud docker -- push asia.gcr.io/saas-orangesys-io/alpine-grafana:${tag}
+  docker logout
 done
