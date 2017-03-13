@@ -43,6 +43,7 @@ deployment:
       - sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_NAME
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push orangesys/alpine-grafana
-      - ./deploy.sh
       - docker logout
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS quay.io
+      - ./deploy.sh
       - curl -X POST https://hooks.microbadger.com/images/orangesys/alpine-grafana/Vc6Ccpu1qw0ndIHKp_q8BwpgQ18=
