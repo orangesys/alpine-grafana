@@ -1,15 +1,16 @@
 FROM alpine:3.5
 MAINTAINER "Gavin zhou" <gavin.zhou@gmail.com>
 
-ENV GRAFANA_VERSION=4.2.0-beta1 \
- GLIBC_VERSION=2.25-r0
+ENV GRAFANA_VERSION=4.2.0 \
+ GLIBC_VERSION=2.25-r0 \
+ GOSU_VERSION=1.10
 
 RUN set -ex \
  && addgroup -S grafana \
  && adduser -S -G grafana grafana \
  && apk add --no-cache ca-certificates openssl fontconfig bash curl \
  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community dumb-init \
- && curl -sL https://github.com/tianon/gosu/releases/download/1.9/gosu-amd64 > /usr/sbin/gosu \
+ && curl -sL https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-amd64 > /usr/sbin/gosu \
  && chmod +x /usr/sbin/gosu  \
  && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub \
  && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
