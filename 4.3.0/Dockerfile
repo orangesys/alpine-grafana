@@ -1,7 +1,7 @@
 FROM alpine:3.5
 MAINTAINER "Gavin zhou" <gavin.zhou@gmail.com>
 
-ENV GRAFANA_VERSION=4.2.0 \
+ENV GRAFANA_VERSION=4.3.0 \
  GLIBC_VERSION=2.25-r0 \
  GOSU_VERSION=1.10
 
@@ -15,7 +15,7 @@ RUN set -ex \
  && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub \
  && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
  && apk add glibc-${GLIBC_VERSION}.apk \
- && wget https://grafanarel.s3.amazonaws.com/builds/grafana-$GRAFANA_VERSION.linux-x64.tar.gz \
+ && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-x64.tar.gz \
  && tar -xzf grafana-$GRAFANA_VERSION.linux-x64.tar.gz \
  && mv grafana-$GRAFANA_VERSION/ grafana/ \
  && mv grafana/bin/* /usr/local/bin/ \
