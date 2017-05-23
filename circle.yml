@@ -10,9 +10,6 @@ machine:
     - docker
 
 dependencies:
-  cache_directories:
-    - "~/docker"
-
   pre:
     - git tag
     - docker info
