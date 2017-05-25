@@ -1,7 +1,7 @@
 FROM alpine:3.5
 MAINTAINER "Gavin zhou" <gavin.zhou@gmail.com>
 
-ENV GRAFANA_VERSION=4.3.0 \
+ENV GRAFANA_VERSION=4.3.1 \
  GLIBC_VERSION=2.25-r0 \
  GOSU_VERSION=1.10
 
