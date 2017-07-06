@@ -2,8 +2,6 @@ machine:
   environment:
     PROJECT_NAME: orangesys
     CLOUDSDK_COMPUTE_ZONE: asia-northeast1-c
-  pre:
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
   timezone:
     Asia/Tokyo
   services:
@@ -11,7 +9,6 @@ machine:
 
 dependencies:
   pre:
-    - git tag
     - docker info
   post:
     - ./build.sh
