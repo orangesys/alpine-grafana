@@ -4,11 +4,13 @@ set -ex
 version=$(git describe --always --tags|sed 's/^v//')
 
 docker run -d -p 3000:3000 orangesys/alpine-grafana:${version}
-sleep 3
-docker ps
-curl -X GET 'http://127.0.0.1:3000/api/health'
+docker run --network container:contacts \
+  appropriate/curl --retry 10 --retry-delay 1 --retry-connrefused \
+    -X GET 'http://127.0.0.1:3000/api/health'
 
-curl -s 'http://admin:admin@127.0.0.1:3000/api/datasources' \
+docker run --network container:contacts \
+  appropriate/curl --retry 10 --retry-delay 1 --retry-connrefused \
+    -s 'http://admin:admin@127.0.0.1:3000/api/datasources' \
     -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
     --data-binary '{
