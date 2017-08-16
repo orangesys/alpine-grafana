@@ -33,6 +33,10 @@ jobs:
           name: Build container images
           command: |
             ./scripts/create-container.sh
+      - run:
+          name: Test grafana container images
+          command: |
+            ./scripts/checkgrafana.sh
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
