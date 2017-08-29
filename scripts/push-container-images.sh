@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-version=$(git describe --always --tags|sed 's/^v//')
+version=$(git describe --always --tags)
 
 docker push orangesys/${CIRCLE_PROJECT_REPONAME}
 
