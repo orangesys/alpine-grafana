@@ -77,8 +77,6 @@ jobs:
             ./scripts/push-container-images.sh
             curl -X POST https://hooks.microbadger.com/images/orangesys/alpine-grafana/Vc6Ccpu1qw0ndIHKp_q8BwpgQ18=
 
-
-
 workflows:
   version: 2
   build-and-deploy:
