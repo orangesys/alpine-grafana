@@ -5,7 +5,7 @@ version=$(git describe --always --tags)
 
 docker run -d --name grafana -p 3000:3000 orangesys/alpine-grafana:${version}
 docker run --network container:grafana \
-		appropriate/curl -s -X GET 'http://127.0.0.1:3000/api/healt'
+		appropriate/curl -s -X GET 'http://127.0.0.1:3000/api/health'
 
 docker run --network container:grafana \
 		appropriate/curl \
