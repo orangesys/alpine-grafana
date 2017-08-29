@@ -1,11 +1,11 @@
 #!/bin/bash
 set -ex
 
-version=$(git describe --always --tags|sed 's/^v//')
+version=$(git describe --always --tags)
 
 docker run -d --name grafana -p 3000:3000 orangesys/alpine-grafana:${version}
 docker run --network container:grafana \
-		appropriate/curl -s -X GET 'http://127.0.0.1:3000/api/health' | grep -q "ok"
+		appropriate/curl -s -X GET 'http://127.0.0.1:3000/api/healt'
 
 docker run --network container:grafana \
 		appropriate/curl \
