@@ -47,6 +47,8 @@ jobs:
             docker save -o /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
       - persist_to_workspace:
           root: *workspace_root
+          paths:
+            - .
 
   deploy:
     <<: *container_config
