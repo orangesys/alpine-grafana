@@ -7,7 +7,7 @@ steps:
   args: ['push', 'asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME']
 - id: 'deploy'
   name: 'gcr.io/cloud-builders/kubectl'
-  args: ['set', 'image', 'deployment/demo-g-grafana' demo-g-grafana=asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME]
+  args: ['set', 'image', 'deployment/demo-g-grafana', 'demo-g-grafana=asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME']
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast1-c'
   - 'CLOUDSDK_CONTAINER_CLUSTER=orangesys-io'
