@@ -73,10 +73,7 @@ jobs:
           name: Show docker images & set tag & push docker hub and gcloud
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            #echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/account-auth.json
-            #gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
-            #gcloud config set project $PROJECT_NAME
-            ./scripts/push-container-images.sh
+            docker push orangesys/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
             curl -X POST https://hooks.microbadger.com/images/orangesys/alpine-grafana/Vc6Ccpu1qw0ndIHKp_q8BwpgQ18=
 
 workflows:
