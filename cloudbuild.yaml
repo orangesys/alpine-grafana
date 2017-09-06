@@ -1,7 +1,7 @@
 steps:
 - id: 'build-tag'
   name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME', '.']
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME', '.']
 - id: 'push'
   name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME']
+  args: ['push', 'asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME']
