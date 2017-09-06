@@ -8,7 +8,14 @@ references:
       PROJECT_NAME: orangesys
       CLOUDSDK_COMPUTE_ZONE: asia-northeast1-c
       ORG_PATH: "github.com/orangesys"
-      REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"    
+      REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
+
+  workspace_root: &workspace_root
+    /tmp/workspace
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
 
 jobs:
   build_container:
@@ -16,11 +23,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /caches/alpine-grafana.tar
       - run:
           name: Install docker client
           command: |
@@ -37,21 +39,18 @@ jobs:
           name: Test grafana container images
           command: |
             ./scripts/checkgrafana.sh
-      - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/alpine-grafana.tar
+      - run:
+          name: save container image to workspace
+          command: |
+            version=$(git describe --always --tags)
+            mkdir -p /tmp/workspace
+            docker save -o /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
 
   deploy:
     <<: *container_config
     steps:
-      - checkout
+      - *attach_workspace
       - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /caches/alpine-grafana.tar
       - run:
           name: Install docker client
           command: |
@@ -64,8 +63,7 @@ jobs:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            ls /caches/
-            docker load -i /caches/alpine-grafana.tar | true
+            docker load -i /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar | true
             docker images
       - run:
           name: Show docker images & set tag & push docker hub and gcloud
