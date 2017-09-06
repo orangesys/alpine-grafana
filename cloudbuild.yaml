@@ -1,0 +1,7 @@
+steps:
+- id: 'build-tag'
+  name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$TAG_NAME', '.']
+- id: 'push'
+  name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/$REPO_NAME:$TAG_NAME']
