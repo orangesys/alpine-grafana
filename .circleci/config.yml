@@ -45,7 +45,7 @@ jobs:
             version=$(git describe --always --tags)
             mkdir -p /tmp/workspace
             docker save -o /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
-
+            ls /tmp/workspace            
   deploy:
     <<: *container_config
     steps:
