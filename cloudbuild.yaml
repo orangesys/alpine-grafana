@@ -6,10 +6,8 @@ steps:
   name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME']
 - id: 'deploy'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud container clusters get-credentials orangesys-io --zone asia-northeast1-c
-    kubectl set image deployment/demo-g-grafana demo-g-grafana=asia.gcr.io/$PROJECT_ID/alpine-grafana:$TAG_NAME
+  name: 'gcr.io/cloud-builders/kubectl'
+  args: ['get', 'pods']
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast1-c'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=orangesys-io'
