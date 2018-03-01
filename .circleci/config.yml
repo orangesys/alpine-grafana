@@ -73,7 +73,9 @@ jobs:
           name: Show docker images & set tag & push docker hub and gcloud
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker tag orangesys/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG} orangesys/${CIRCLE_PROJECT_REPONAME}:latest
             docker push orangesys/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
+            docker push orangesys/${CIRCLE_PROJECT_REPONAME}
             curl -X POST https://hooks.microbadger.com/images/orangesys/alpine-grafana/Vc6Ccpu1qw0ndIHKp_q8BwpgQ18=
 
 workflows:
