@@ -19,7 +19,7 @@ RUN set -ex \
  && tar -xzf grafana-$GRAFANA_VERSION.linux-x64.tar.gz \
  && mv grafana-$GRAFANA_VERSION/ grafana/ \
  && mv grafana/bin/* /usr/local/bin/ \
- && mkdir -p /grafana/{dashboards,data,logs,plugins} \
+ && mkdir -p /grafana/dashboards /grafana/data /grafana/logs /grafana/plugins \
  && mkdir /var/lib/grafana/ \
  && ln -s /grafana/plugins /var/lib/grafana/plugins \
  && grafana-cli plugins update-all \
