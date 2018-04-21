@@ -35,7 +35,6 @@ jobs:
       - setup_remote_docker:
           version: 17.07.0-ce
       - *install_docker_client
-
       - run:
           name: Build container images
           command: |
@@ -65,7 +64,8 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
-            docker load -i /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar | true
+            ls /tmp/workspace/
+            docker load -i /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar
             docker images
       - run:
           name: Show docker images & set tag & push docker hub and gcloud
