@@ -59,7 +59,7 @@ jobs:
     <<: *container_config
     steps:
       - *attach_workspace
-      - setup_remote_docker
+      - setup_remote_docker:
           version: 17.07.0-ce
       - *install_docker_client
       - run:
