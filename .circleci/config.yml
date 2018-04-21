@@ -65,7 +65,6 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
-            set +o pipefail
             docker load -i /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar | true
             docker images
       - run:
