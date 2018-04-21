@@ -2,6 +2,7 @@
 set -ex
 
 version=$(git describe --always --tags)
+docker pull byrnedo/alpine-curl
 
 docker run -d --name grafana -p 3000:3000 orangesys/alpine-grafana:${version}
 docker run --network container:grafana \
