@@ -4,11 +4,22 @@ references:
   container_config: &container_config
     docker:
       - image: google/cloud-sdk
+
     environment:
       PROJECT_NAME: orangesys
       CLOUDSDK_COMPUTE_ZONE: asia-northeast1-c
       ORG_PATH: "github.com/orangesys"
       REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
+
+    install_docker_client: &install_docker_client
+      - run:
+          name: Install docker client
+          command: |
+            set -x
+            VER="17.05.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin      
 
   workspace_root: &workspace_root
     /tmp/workspace
@@ -23,14 +34,9 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: Install docker client
-          command: |
-            set -x
-            VER="17.05.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+          version: 17.07.0-ce
+      - *install_docker_client
+
       - run:
           name: Build container images
           command: |
@@ -55,14 +61,8 @@ jobs:
     steps:
       - *attach_workspace
       - setup_remote_docker
-      - run:
-          name: Install docker client
-          command: |
-            set -x
-            VER="17.05.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+          version: 17.07.0-ce
+      - *install_docker_client
       - run:
           name: Load Docker image layer cache
           command: |
