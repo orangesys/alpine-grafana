@@ -1,7 +1,7 @@
 FROM alpine:3.7
 LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
 
-ENV GRAFANA_VERSION=5.1.0-beta1 \
+ENV GRAFANA_VERSION=5.1.0 \
  GLIBC_VERSION=2.26-r0 \
  GOSU_VERSION=1.10
 
