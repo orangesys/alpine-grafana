@@ -64,7 +64,6 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
-            ls /tmp/workspace/
             docker load -i /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar
             docker images
       - run:
