@@ -6,10 +6,10 @@ version=$(git describe --always --tags)
 docker run -d --name grafana -p 3000:3000 orangesys/alpine-grafana:${version}
 sleep 1
 docker run --network container:grafana \
-		byrnedo/alpine-curl -s -X GET 'http://127.0.0.1:3000/api/health'
+		orangesys/docker-curl -s -X GET 'http://127.0.0.1:3000/api/health'
 
 docker run --network container:grafana \
-		byrnedo/alpine-curl \
+		orangesys/docker-curl \
     -s 'http://admin:admin@127.0.0.1:3000/api/datasources' \
     -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
