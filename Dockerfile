@@ -16,7 +16,7 @@ RUN set -ex \
  && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
  && apk add glibc-${GLIBC_VERSION}.apk \
  && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
- && tar -xzf grafana-$GRAFANA_VERSION.linux-x64.tar.gz \
+ && tar -xzf grafana-$GRAFANA_VERSION.linux-amd64.tar.gz \
  && mv grafana-$GRAFANA_VERSION/ grafana/ \
  && mv grafana/bin/* /usr/local/bin/ \
  && mkdir -p /grafana/dashboards /grafana/data /grafana/logs /grafana/plugins \
@@ -24,7 +24,7 @@ RUN set -ex \
  && ln -s /grafana/plugins /var/lib/grafana/plugins \
  && grafana-cli plugins update-all \
  && rm -f grafana/conf/*.ini \
- && rm grafana-$GRAFANA_VERSION.linux-x64.tar.gz /etc/apk/keys/sgerrand.rsa.pub glibc-${GLIBC_VERSION}.apk \
+ && rm grafana-$GRAFANA_VERSION.linux-amd64.tar.gz /etc/apk/keys/sgerrand.rsa.pub glibc-${GLIBC_VERSION}.apk \
  && chown -R grafana:grafana /grafana \
  && apk del curl
 
