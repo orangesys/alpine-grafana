@@ -8,30 +8,24 @@ ENV GRAFANA_VERSION=5.2.2 \
 RUN set -ex \
  && addgroup -S grafana \
  && adduser -S -G grafana grafana \
- && apk add --no-cache ca-certificates openssl fontconfig bash curl \
- && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community dumb-init \
- && curl -sL https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-amd64 > /usr/sbin/gosu \
- && chmod +x /usr/sbin/gosu  \
- && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub \
- && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
- && apk add glibc-${GLIBC_VERSION}.apk \
- && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
- && tar -xzf grafana-$GRAFANA_VERSION.linux-amd64.tar.gz \
- && mv grafana-$GRAFANA_VERSION/ grafana/ \
- && mv grafana/bin/* /usr/local/bin/ \
- && mkdir -p /grafana/dashboards /grafana/data /grafana/logs /grafana/plugins \
- && mkdir /var/lib/grafana/ \
+ && apk add --no-cache libc6-compat ca-certificates su-exec \
+ && mkdir /tmp/setup \
+ && wget -P /tmp/setup https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
+ && tar -xzf /tmp/grafana-$GRAFANA_VERSION.linux-amd64.tar.gz -C /tmp/setup --strip-components=1 \
+ && install -m 755 /tmp/setup/bin/grafana-server /usr/local/bin/ \
+ && install -m 755 /tmp/setup/bin/grafana-cli /usr/local/bin/ \
+ && mkdir -p /grafana/datasources /grafana/dashboards /grafana/data /grafana/logs /grafana/plugins /var/lib/grafana \
+ && cp -r /tmp/setup/public /grafana/public \
+ && chown -R grafana:grafana /grafana \
  && ln -s /grafana/plugins /var/lib/grafana/plugins \
  && grafana-cli plugins update-all \
- && rm -f grafana/conf/*.ini \
- && rm grafana-$GRAFANA_VERSION.linux-amd64.tar.gz /etc/apk/keys/sgerrand.rsa.pub glibc-${GLIBC_VERSION}.apk \
- && chown -R grafana:grafana /grafana \
- && apk del curl
+ && rm -rf /tmp/setup
 
-VOLUME  ["/grafana"]
+VOLUME /grafana/data
+
 COPY ./config.docker/defaults.ini /grafana/conf/
 COPY ./run.sh /run.sh
 
 EXPOSE 3000
 
-ENTRYPOINT ["/run.sh"]
+CMD ["/run.sh"]
