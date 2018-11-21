@@ -1,31 +1,30 @@
 version: 2
 
-references:
-  container_config: &container_config
-    docker:
-      - image: google/cloud-sdk
+container_config: &container_config
+  docker:
+    - image: google/cloud-sdk
 
-    environment:
-      PROJECT_NAME: orangesys
-      CLOUDSDK_COMPUTE_ZONE: asia-northeast1-c
-      ORG_PATH: "github.com/orangesys"
-      REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
+  environment:
+    PROJECT_NAME: orangesys
+    CLOUDSDK_COMPUTE_ZONE: asia-northeast1-c
+    ORG_PATH: "github.com/orangesys"
+    REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
 
-    install_docker_client: &install_docker_client
-      run:
-        name: Install docker client
-        command: |
-          VER="17.07.0-ce"
-          curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/edge/x86_64/docker-${VER}.tgz
-          tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
-          mv /tmp/docker/* /usr/bin
+  install_docker_client: &install_docker_client
+    run:
+      name: Install docker client
+      command: |
+        VER="17.07.0-ce"
+        curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/edge/x86_64/docker-${VER}.tgz
+        tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
+        mv /tmp/docker/* /usr/bin
 
-  workspace_root: &workspace_root
-    /tmp/workspace
+workspace_root: &workspace_root
+  /tmp/workspace
 
-  attach_workspace: &attach_workspace
-    attach_workspace:
-      at: *workspace_root
+attach_workspace: &attach_workspace
+  attach_workspace:
+    at: *workspace_root
 
 jobs:
   build_container:
