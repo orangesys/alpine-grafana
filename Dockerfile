@@ -16,7 +16,6 @@ RUN set -ex \
  && cp -r /tmp/setup/public /grafana/public \
  && chown -R grafana:grafana /grafana \
  && ln -s /grafana/plugins /var/lib/grafana/plugins \
- && ln -s /grafana/conf /etc/grafana \
  && grafana-cli plugins update-all \
  && rm -rf /tmp/setup
 
