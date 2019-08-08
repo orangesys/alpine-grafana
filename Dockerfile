@@ -1,15 +1,14 @@
 ARG BASE_IMAGE=alpine:3.9
-ARG GRAFANA_VERSION=6.3.2
 FROM ${BASE_IMAGE}
 
-ARG GRAFANA_TGZ="grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz"
+ENV GRAFANA_VERSION=6.3.2
 RUN mkdir /tmp/grafana \
   && wget -P /tmp/ http://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
   && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
 
 
 ARG BASE_IMAGE=alpine:3.9
-FROM ${BASE_IMAGE}}
+FROM ${BASE_IMAGE}
 LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
 
 ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
