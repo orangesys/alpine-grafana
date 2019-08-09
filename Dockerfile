@@ -1,27 +1,43 @@
-FROM alpine:3.9
-LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
+ARG BASE_IMAGE=alpine:3.9
+FROM ${BASE_IMAGE}
 
 ENV GRAFANA_VERSION=6.3.2
+RUN mkdir /tmp/grafana \
+  && wget -P /tmp/ http://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
+  && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
+
+
+ARG BASE_IMAGE=alpine:3.9
+FROM ${BASE_IMAGE}
+LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
+
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
+    GF_PATHS_DATA="/var/lib/grafana" \
+    GF_PATHS_HOME="/usr/share/grafana" \
+    GF_PATHS_LOGS="/var/log/grafana" \
+    GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
+    GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
+
+WORKDIR $GF_PATHS_HOME    
 
 RUN set -ex \
- && addgroup -S grafana \
- && adduser -S -G grafana grafana \
- && apk add --no-cache libc6-compat ca-certificates su-exec \
- && mkdir /tmp/setup \
- && wget -P /tmp/setup http://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
- && tar -xzf /tmp/setup/grafana-$GRAFANA_VERSION.linux-amd64.tar.gz -C /tmp/setup --strip-components=1 \
- && install -m 755 /tmp/setup/bin/grafana-server /usr/local/bin/ \
- && install -m 755 /tmp/setup/bin/grafana-cli /usr/local/bin/ \
- && mkdir -p /grafana/datasources /grafana/dashboards /grafana/data /grafana/logs /grafana/plugins /var/lib/grafana /grafana/conf \
- && cp -r /tmp/setup/public /grafana/public \
- && chown -R grafana:grafana /grafana \
- && ln -s /grafana/plugins /var/lib/grafana/plugins \
- && grafana-cli plugins update-all \
- && rm -rf /tmp/setup
+    && addgroup -S grafana \
+    && adduser -S -G grafana grafana \
+    && apk add --no-cache libc6-compat ca-certificates su-exec bash
 
-VOLUME /grafana/data
+COPY --from=0 /tmp/grafana "$GF_PATHS_HOME"
+RUN mkdir -p "$GF_PATHS_HOME/.aws" \
+    && mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
+        "$GF_PATHS_PROVISIONING/dashboards" \
+        "$GF_PATHS_PROVISIONING/notifiers" \
+        "$GF_PATHS_LOGS" \
+        "$GF_PATHS_PLUGINS" \
+        "$GF_PATHS_DATA" \
+    && chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" \
+    && chmod -R 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
 
-COPY ./config.docker/defaults.ini /grafana/conf/
+COPY ./config.docker/defaults.ini "$GF_PATHS_CONFIG"
 COPY ./run.sh /run.sh
 
 EXPOSE 3000
