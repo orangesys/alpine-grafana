@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=alpine:3.9
 FROM ${BASE_IMAGE}
 
-ENV GRAFANA_VERSION=6.3.2
+ENV GRAFANA_VERSION=6.3.3
 RUN mkdir /tmp/grafana \
   && wget -P /tmp/ http://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
   && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
