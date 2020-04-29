@@ -1,13 +1,13 @@
-ARG BASE_IMAGE=alpine:3.10.3
+ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE}
 
-ENV GRAFANA_VERSION=6.6.2
+ENV GRAFANA_VERSION=6.7.3
 RUN mkdir /tmp/grafana \
   && wget -P /tmp/ https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz \
   && tar xfz /tmp/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz --strip-components=1 -C /tmp/grafana
 
 
-ARG BASE_IMAGE=alpine:3.9
+ARG BASE_IMAGE=alpine:3.11.6
 FROM ${BASE_IMAGE}
 LABEL maintainer "gavin zhou <gavin.zhou@gmail.com>"
 
